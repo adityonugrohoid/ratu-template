@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ratu-template"
+version = "0.1.0"
+description = "RATU Template: Real-time Automated Techstack Unified starting point"
+authors = [{ name = "Adityo Nugroho" }]
+license = { file = "LICENSE" }
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ratu_template*"]
