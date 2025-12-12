@@ -1,0 +1,82 @@
+[project]
+name = "ratu-template"
+version = "0.1.0"
+description = "RATU Template: Starter project for Real-time Automated Trading Unified systems"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Adityo Nugroho", email = "adityo.nugroho.id@gmail.com" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = []
+
+[project.scripts]
+ratu-template = "ratu_template.main:main"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# =============================================================================
+# Pytest Configuration
+# =============================================================================
+# Minimal friction testing - focus on behavior, not coverage metrics
+[tool.pytest.ini_options]
+minversion = "6.0"
+# NOTE: Coverage disabled by default - enable with --cov when needed
+# Rationale: Bot scripts often have async/websocket code hard to cover in unit tests
+addopts = "-ra -q"
+asyncio_mode = "auto"
+testpaths = ["tests"]
+# Suppress noisy warnings from third-party async libraries
+filterwarnings = [
+    "ignore::DeprecationWarning:websockets.exceptions",
+    "ignore::DeprecationWarning:asyncio",
+]
+
+# =============================================================================
+# Ruff Linting Configuration (LOOSER)
+# =============================================================================
+# Catch syntax errors and obvious bugs only
+# Trading bots have unique patterns (callbacks, state machines, API naming)
+[tool.ruff]
+exclude = [".git", ".venv", "build", "dist", "__pycache__", "*.egg-info"]
+line-length = 120  # Relaxed: trading logic often has descriptive variable names
+indent-width = 4
+
+[tool.ruff.lint]
+# MINIMAL rule set - only critical errors
+# E4: Import errors
+# E7: Statement errors  
+# E9: Runtime errors
+# F: Pyflakes (undefined names, unused imports)
+# I: isort (import sorting - optional, can remove if annoying)
+select = ["E4", "E7", "E9", "F", "I"]
+
+# Extensive ignore list for bot development patterns
+ignore = [
+    "F401",    # Unused imports - common in __init__.py re-exports
+    "F841",    # Unused variables - common in destructuring API responses
+    "E501",    # Line too long - handled by line-length setting above
+]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
