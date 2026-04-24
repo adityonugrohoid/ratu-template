@@ -1,105 +1,176 @@
+<div align="center">
+
 # RATU Template
 
-[Python 3.10+](https://www.python.org/downloads/) | [uv](https://github.com/astral-sh/uv) | [RATUProject](https://github.com/adityonugrohoid)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![uv](https://img.shields.io/badge/packaging-uv-orange.svg)](https://github.com/astral-sh/uv)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-active-success.svg)](#)
 
-Starter template for building real-time, event-driven trading and monitoring systems.
+**Python template for rapid prototyping of real-time, event-driven trading and monitoring systems.**
 
-> **System Prototyping Focus**: Standardized project structure for rapid prototyping of event-driven systems
+[Getting Started](#getting-started) | [Architecture](#architecture) | [Creating a New Project](#creating-a-new-project-from-this-template)
 
-## Part of RATUProject
+</div>
 
-This repository is part of **RATUProject** (Real-time Automated Trading Unified) - an open-source portfolio demonstrating real-time, event-driven system design for financial markets and blockchain integrations.
+---
 
-## System Overview
+## Features
+
+- **Opinionated `src/` layout** — prevents accidental imports, cleaner packaging, mirror test structure
+- **uv-ready** — `pyproject.toml` with lockfile for fast, reproducible installs
+- **Async-first test harness** — `pytest` + `pytest-asyncio` configured with `asyncio_mode="auto"`
+- **Pragmatic linting** — `ruff` tuned for trading-bot patterns (destructured but unused API fields are OK)
+- **Zero runtime dependencies** — batteries-excluded foundation; add only what the project needs
+
+## Tech Stack
+
+| Component | Technology |
+|-----------|------------|
+| Language | Python 3.10+ |
+| Package manager | uv |
+| Testing | pytest, pytest-asyncio |
+| Linting | ruff |
+| Runtime deps | none (add per project) |
+
+## Architecture
 
 ```mermaid
 flowchart TB
-    subgraph "RATU Template Structure"
+    subgraph Template["RATU Template Structure"]
         SRC["src/ratu_template/"]
         MAIN["main.py"]
         CONFIG["config.py"]
         TESTS["tests/"]
         PYPROJ["pyproject.toml"]
     end
-    
-    subgraph "Customization Points"
-        CORE["Add Core Logic"]
-        WS["Add WebSocket Streams"]
-        API["Add API Integration"]
-        NOTIF["Add Notifications"]
+
+    subgraph Customization["Customization Points"]
+        CORE["Core event loop"]
+        WS["WebSocket streams"]
+        API["API integration"]
+        NOTIF["Notifications"]
     end
-    
+
     SRC --> MAIN
     SRC --> CONFIG
-    
     MAIN --> CORE
     CORE --> WS
     CORE --> API
     CORE --> NOTIF
-    
-    style SRC fill:#4A90E2
-    style CORE fill:#7ED321
+
+    style Template fill:#0f3460,stroke:#16213e,color:#fff
+    style Customization fill:#16213e,stroke:#0f3460,color:#fff
+    style SRC fill:#533483,color:#fff
+    style CORE fill:#533483,color:#fff
 ```
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.10+
+- [uv](https://github.com/astral-sh/uv)
+
+### Installation
+
+```bash
+git clone https://github.com/adityonugrohoid/ratu-template.git
+cd ratu-template
+uv sync
+```
+
+### Usage
+
+```bash
+# Run the stub entry point
+uv run ratu-template
+
+# Run the test suite
+uv run pytest
+```
+
+## How It Works
+
+### What's pre-wired
+
+| Element | Included |
+|---------|----------|
+| Project layout | `src/ratu_template/` with `__init__.py`, `main.py`, `config.py` |
+| Test harness | `tests/` with pytest + asyncio config and a shared fixture |
+| Packaging | `pyproject.toml` with a `[project.scripts]` CLI entry `ratu-template` |
+| Linting | `ruff` with trading-domain-aware ignores (F401, F841) |
+| Config skeleton | Module-level constants (`APP_NAME`, `VERSION`, `LOG_LEVEL`) |
+
+### What a new project adds
+
+- Core event loop / async orchestration in `main()`
+- API clients, WebSocket handlers, or polling logic
+- Environment loading (`.env.example` is provided; no `dotenv` library pre-wired)
+- Real test coverage for any added modules
 
 ## Project Structure
 
 ```
 ratu-template/
-  src/
-    ratu_template/
-      __init__.py      # Package initialization
-      main.py          # Entry point
-      config.py        # Configuration settings
-  tests/
-    conftest.py        # Shared fixtures
-    test_main.py       # Main module tests
-    test_config.py     # Config module tests
-  pyproject.toml       # Project configuration (uv-ready)
-  .env.example         # Environment variables template
-  README.md            # This file
-  LICENSE              # MIT License
+├── src/
+│   └── ratu_template/
+│       ├── __init__.py       # Package metadata (__version__)
+│       ├── main.py           # Stub entry point — replace with your logic
+│       └── config.py         # Module constants + commented examples
+├── tests/
+│   ├── conftest.py           # Shared pytest fixtures
+│   ├── test_main.py          # Verifies main() output
+│   └── test_config.py        # Verifies config constants
+├── .env.example              # Environment variable template
+├── pyproject.toml            # Project + tool config, uv-lockable
+├── uv.lock                   # Pinned dependency set
+└── LICENSE
 ```
+
+## Testing
+
+```bash
+uv run pytest                  # full test suite
+uv run pytest -v               # verbose
+uv run pytest -k test_main     # filter by name
+```
+
+## Creating a New Project From This Template
+
+1. Click **Use this template** on GitHub, or clone directly
+2. Rename `src/ratu_template/` → `src/your_project/`
+3. Update `pyproject.toml`: `name`, `[project.scripts]`, wheel target
+4. Replace `main.py` with the project's event loop
+5. Extend `config.py` for environment-specific settings
+6. Add dependencies: `uv add <package>`
 
 ## Design Decisions
 
 | Decision | Rationale |
 |----------|-----------|
-| src layout | Prevents accidental imports, cleaner packaging |
-| uv for dependencies | Fast, reliable Python package management |
-| Looser linting | Pragmatic for bot development patterns |
+| `src/` layout | Prevents accidental imports, cleaner packaging |
+| uv for dependencies | Fast, reproducible; lockfile included |
+| Relaxed ruff rules | Pragmatic for bot patterns where API fields are destructured but unused |
 | Mirror test structure | Easy to locate tests for each module |
+| Zero runtime deps | Every project has different needs; don't prescribe |
 
-## Setup
+## Part of RATUProject
 
-```bash
-# Clone and navigate
-git clone https://github.com/adityonugrohoid/ratu-template.git
-cd ratu-template
+**RATUProject** (Real-time Automated Trading Unified) is a personal portfolio of real-time, event-driven system designs for financial markets and blockchain integrations. This template is the scaffold for new RATU repositories.
 
-# Sync dependencies with uv
-uv sync
+## Roadmap
 
-# Run tests
-uv run pytest
-
-# Run the application
-uv run ratu-template
-```
-
-## Creating a New Project
-
-1. Use this template on GitHub or clone directly
-2. Rename `src/ratu_template/` to your project name
-3. Update `pyproject.toml` with your project details
-4. Add your core logic to `main.py`
-5. Extend configuration in `config.py`
+- [x] Base `src/` layout with uv
+- [x] pytest + asyncio harness
+- [x] CLI entry point
+- [ ] Optional dotenv integration (commented example)
+- [ ] Pre-commit hook recipe (ruff + pytest smoke)
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE).
 
 ## Author
 
-**Adityo Nugroho**
-- GitHub: https://github.com/adityonugrohoid
-- LinkedIn: https://www.linkedin.com/in/adityonugrohoid/
+**Adityo Nugroho** ([@adityonugrohoid](https://github.com/adityonugrohoid))
