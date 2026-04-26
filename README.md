@@ -7,13 +7,31 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-active-success.svg)](#)
 
-**Python template for rapid prototyping of real-time, event-driven trading and monitoring systems.**
+**Python template for real-time, event-driven trading and monitoring systems — uv, pytest, async-ready.**
 
-[Getting Started](#getting-started) | [Architecture](#architecture) | [Creating a New Project](#creating-a-new-project-from-this-template)
+[Getting Started](#getting-started) | [Usage](#usage) | [Architecture](#architecture)
 
 </div>
 
 ---
+
+## Table of Contents
+
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Usage](#usage)
+- [How It Works](#how-it-works)
+- [Project Structure](#project-structure)
+- [Testing](#testing)
+- [Architectural Decisions](#architectural-decisions)
+- [Related Projects](#related-projects)
+- [License](#license)
+- [Author](#author)
 
 ## Features
 
@@ -80,7 +98,15 @@ cd ratu-template
 uv sync
 ```
 
-### Usage
+### Configuration
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your runtime settings (API keys, log levels, etc.).
+
+## Usage
 
 ```bash
 # Run the stub entry point
@@ -136,36 +162,46 @@ uv run pytest -v               # verbose
 uv run pytest -k test_main     # filter by name
 ```
 
-## Creating a New Project From This Template
+## Architectural Decisions
 
-1. Click **Use this template** on GitHub, or clone directly
-2. Rename `src/ratu_template/` → `src/your_project/`
-3. Update `pyproject.toml`: `name`, `[project.scripts]`, wheel target
-4. Replace `main.py` with the project's event loop
-5. Extend `config.py` for environment-specific settings
-6. Add dependencies: `uv add <package>`
+### 1. `src/` layout
 
-## Design Decisions
+**Decision:** Packages are placed under `src/` with mirrored test structure.
 
-| Decision | Rationale |
-|----------|-----------|
-| `src/` layout | Prevents accidental imports, cleaner packaging |
-| uv for dependencies | Fast, reproducible; lockfile included |
-| Relaxed ruff rules | Pragmatic for bot patterns where API fields are destructured but unused |
-| Mirror test structure | Easy to locate tests for each module |
-| Zero runtime deps | Every project has different needs; don't prescribe |
+**Reasoning:** Prevents accidental imports from the local directory, ensures wheel metadata is correct, and makes it obvious which modules are exportable. Test discovery stays aligned.
 
-## Part of RATUProject
+### 2. uv for package management
 
-**RATUProject** (Real-time Automated Trading Unified) is a personal portfolio of real-time, event-driven system designs for financial markets and blockchain integrations. This template is the scaffold for new RATU repositories.
+**Decision:** Use `uv` with a pinned lockfile instead of pip.
 
-## Roadmap
+**Reasoning:** Fast, reproducible installs; single lockfile simplifies CI/CD and local dev parity. `pyproject.toml` is the source of truth.
 
-- [x] Base `src/` layout with uv
-- [x] pytest + asyncio harness
-- [x] CLI entry point
-- [ ] Optional dotenv integration (commented example)
-- [ ] Pre-commit hook recipe (ruff + pytest smoke)
+### 3. Relaxed ruff rules
+
+**Decision:** Ignore F401 (unused imports) and F841 (unused variables).
+
+**Reasoning:** Pragmatic for trading bots where API responses are destructured and some fields are discarded; re-exports in `__init__.py` are common. Catches real syntax errors (E4, E7, E9) while avoiding noise.
+
+### 4. Zero runtime dependencies
+
+**Decision:** No pre-installed runtime packages; each project adds only what it needs.
+
+**Reasoning:** Trading systems and monitoring tools have wildly different requirements (websockets, HTTP clients, data processing). Batteries-excluded foundation keeps onboarding lightweight.
+
+### 5. Async-first test harness
+
+**Decision:** pytest + pytest-asyncio with `asyncio_mode="auto"`.
+
+**Reasoning:** Real-time event-driven systems need async support from day one. Auto mode handles fixture scoping transparently.
+
+## Related Projects
+
+| Project | Description |
+|---------|-------------|
+| [ratu-fix-bot](https://github.com/adityonugrohoid/ratu-fix-bot) | FIX protocol trading bot for live order management |
+| [ratu-rest-api](https://github.com/adityonugrohoid/ratu-rest-api) | REST API wrapper for real-time market data |
+| [ratu-onchain-monitor](https://github.com/adityonugrohoid/ratu-onchain-monitor) | Blockchain event listener and alerter |
+| [ratu-moon-radar](https://github.com/adityonugrohoid/ratu-moon-radar) | Alternative data sourcing toolkit |
 
 ## License
 
