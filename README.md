@@ -5,9 +5,8 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![uv](https://img.shields.io/badge/packaging-uv-orange.svg)](https://github.com/astral-sh/uv)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/status-active-success.svg)](#)
 
-**Python template for real-time, event-driven trading and monitoring systems — uv, pytest, async-ready.**
+**Opinionated Python scaffold for real-time, event-driven trading and monitoring systems: uv, pytest, async-first.**
 
 [Getting Started](#getting-started) | [Usage](#usage) | [Architecture](#architecture)
 
@@ -35,11 +34,11 @@
 
 ## Features
 
-- **Opinionated `src/` layout** — prevents accidental imports, cleaner packaging, mirror test structure
-- **uv-ready** — `pyproject.toml` with lockfile for fast, reproducible installs
-- **Async-first test harness** — `pytest` + `pytest-asyncio` configured with `asyncio_mode="auto"`
-- **Pragmatic linting** — `ruff` tuned for trading-bot patterns (destructured but unused API fields are OK)
-- **Zero runtime dependencies** — batteries-excluded foundation; add only what the project needs
+- **Opinionated `src/` layout** - prevents accidental imports, cleaner packaging, mirror test structure
+- **uv-ready** - `pyproject.toml` with lockfile for fast, reproducible installs
+- **Async-first test harness** - `pytest` + `pytest-asyncio` configured with `asyncio_mode="auto"`
+- **Pragmatic linting** - `ruff` tuned for trading-bot patterns (destructured but unused API fields are OK)
+- **Zero runtime dependencies** - batteries-excluded foundation; add only what the project needs
 
 ## Tech Stack
 
@@ -142,7 +141,7 @@ ratu-template/
 ├── src/
 │   └── ratu_template/
 │       ├── __init__.py       # Package metadata (__version__)
-│       ├── main.py           # Stub entry point — replace with your logic
+│       ├── main.py           # Stub entry point -- replace with your logic
 │       └── config.py         # Module constants + commented examples
 ├── tests/
 │   ├── conftest.py           # Shared pytest fixtures
@@ -194,18 +193,9 @@ uv run pytest -k test_main     # filter by name
 
 **Reasoning:** Real-time event-driven systems need async support from day one. Auto mode handles fixture scoping transparently.
 
-## Related Projects
-
-| Project | Description |
-|---------|-------------|
-| [ratu-fix-bot](https://github.com/adityonugrohoid/ratu-fix-bot) | FIX protocol trading bot for live order management |
-| [ratu-rest-api](https://github.com/adityonugrohoid/ratu-rest-api) | REST API wrapper for real-time market data |
-| [ratu-onchain-monitor](https://github.com/adityonugrohoid/ratu-onchain-monitor) | Blockchain event listener and alerter |
-| [ratu-moon-radar](https://github.com/adityonugrohoid/ratu-moon-radar) | Alternative data sourcing toolkit |
-
 ## License
 
-MIT — see [LICENSE](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
 
 ## Author
 
