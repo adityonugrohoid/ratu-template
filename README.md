@@ -3,10 +3,10 @@
 # RATU Template
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![uv](https://img.shields.io/badge/packaging-uv-orange.svg)](https://github.com/astral-sh/uv)
+[![uv](https://img.shields.io/badge/uv-package%20manager-blueviolet)](https://github.com/astral-sh/uv)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Opinionated Python scaffold for real-time, event-driven trading and monitoring systems: uv, pytest, async-first.**
+**Opinionated Python scaffold for real-time, event-driven trading and monitoring systems: uv, pytest, async-first**
 
 [Getting Started](#getting-started) | [Usage](#usage) | [Architecture](#architecture)
 
@@ -25,9 +25,9 @@
   - [Configuration](#configuration)
 - [Usage](#usage)
 - [How It Works](#how-it-works)
+- [Architectural Decisions](#architectural-decisions)
 - [Project Structure](#project-structure)
 - [Testing](#testing)
-- [Architectural Decisions](#architectural-decisions)
 - [Related Projects](#related-projects)
 - [License](#license)
 - [Author](#author)
@@ -134,33 +134,6 @@ uv run pytest
 - Environment loading (`.env.example` is provided; no `dotenv` library pre-wired)
 - Real test coverage for any added modules
 
-## Project Structure
-
-```
-ratu-template/
-├── src/
-│   └── ratu_template/
-│       ├── __init__.py       # Package metadata (__version__)
-│       ├── main.py           # Stub entry point -- replace with your logic
-│       └── config.py         # Module constants + commented examples
-├── tests/
-│   ├── conftest.py           # Shared pytest fixtures
-│   ├── test_main.py          # Verifies main() output
-│   └── test_config.py        # Verifies config constants
-├── .env.example              # Environment variable template
-├── pyproject.toml            # Project + tool config, uv-lockable
-├── uv.lock                   # Pinned dependency set
-└── LICENSE
-```
-
-## Testing
-
-```bash
-uv run pytest                  # full test suite
-uv run pytest -v               # verbose
-uv run pytest -k test_main     # filter by name
-```
-
 ## Architectural Decisions
 
 ### 1. `src/` layout
@@ -192,6 +165,42 @@ uv run pytest -k test_main     # filter by name
 **Decision:** pytest + pytest-asyncio with `asyncio_mode="auto"`.
 
 **Reasoning:** Real-time event-driven systems need async support from day one. Auto mode handles fixture scoping transparently.
+
+## Project Structure
+
+```
+ratu-template/
+├── src/
+│   └── ratu_template/
+│       ├── __init__.py       # Package metadata (__version__)
+│       ├── main.py           # Stub entry point, replace with your logic
+│       └── config.py         # Module constants + commented examples
+├── tests/
+│   ├── conftest.py           # Shared pytest fixtures
+│   ├── test_main.py          # Verifies main() output
+│   └── test_config.py        # Verifies config constants
+├── .env.example              # Environment variable template
+├── pyproject.toml            # Project + tool config, uv-lockable
+├── uv.lock                   # Pinned dependency set
+└── LICENSE
+```
+
+## Testing
+
+```bash
+uv run pytest                  # full test suite
+uv run pytest -v               # verbose
+uv run pytest -k test_main     # filter by name
+```
+
+## Related Projects
+
+| Project | Description |
+|---------|-------------|
+| [ratu-moon-radar](https://github.com/adityonugrohoid/ratu-moon-radar) | Multi-chain DEX pair scanner and trending-token detector via Moralis API |
+| [ratu-onchain-monitor](https://github.com/adityonugrohoid/ratu-onchain-monitor) | On-chain token holder analytics and whale tracker via Ankr API |
+| [ratu-rest-api](https://github.com/adityonugrohoid/ratu-rest-api) | Binance market snapshot client for price, depth, trades, and multi-timeframe klines |
+| [ratu-fix-bot](https://github.com/adityonugrohoid/ratu-fix-bot) | Low-latency Binance FIX 4.4 bot with ED25519 auth and a spread market-making loop |
 
 ## License
 
